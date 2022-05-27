@@ -41,6 +41,7 @@ dependencies:
       ref: master
   image_picker: ^0.8.5+3
   provider: ^6.0.3
+  ffmpeg_kit_flutter: ^4.5.1
 
 dev_dependencies:
   flutter_test:

@@ -56,6 +56,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "ffmpeg_kit_flutter",
+      "rootUri": "file:///Users/anesabdic/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/ffmpeg_kit_flutter-4.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "ffmpeg_kit_flutter_platform_interface",
+      "rootUri": "file:///Users/anesabdic/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/ffmpeg_kit_flutter_platform_interface-0.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///Users/anesabdic/Documents/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -248,7 +260,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2022-05-27T07:06:19.250215Z",
+  "generated": "2022-05-27T07:54:43.256700Z",
   "generator": "pub",
   "generatorVersion": "2.17.1"
 }
