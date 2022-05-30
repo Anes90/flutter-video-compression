@@ -1,15 +1,15 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:video_compress/video_compress.dart';
 import 'package:video_compression/enums.dart';
 import 'package:video_compression/videoCompressNotifier.dart';
 
 import 'buttonWidget.dart';
+import 'ffmpeg/ffmpegService.dart';
 import 'progressDialogWidget.dart';
 import 'videoCompressApi.dart';
 
@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   File? fileVideo = null;
   Uint8List? thumbnailBytes;
   int? videoSize;
-  MediaInfo? compressedVideoInfo;
+  //MediaInfo? compressedVideoInfo;
   VideoOutputQuality? videoQuality;
 
   @override
@@ -87,7 +87,13 @@ class _MyHomePageState extends State<MyHomePage> {
     if (fileVideo == null) {
       return ButtonWidget(
         text: 'Pick Video',
-        onClicked: pickVideo,
+        onClicked: () async {
+          if(await Permission.storage.request().isGranted) {
+            FFmpegService().FFmpegExecuteCommand();
+          } else if(await Permission.storage.isPermanentlyDenied){
+            openAppSettings();
+          }
+        },
       );
     } else {
       return Column(
@@ -102,6 +108,13 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 16,
           ),
           buildCompressedVideoInfo(),
+          const SizedBox(
+            height: 16,
+          ),
+          ButtonWidget(
+            text: 'ffmpeg Blur',
+            onClicked: () {},
+          ),
           const SizedBox(
             height: 16,
           ),
@@ -190,9 +203,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future generateThumbnail(File file) async {
-    final thumbnailBytes = await VideoCompress.getByteThumbnail(file.path);
+    /*final thumbnailBytes = await VideoCompress.getByteThumbnail(file.path);
 
-    setState(() => this.thumbnailBytes = thumbnailBytes);
+    setState(() => this.thumbnailBytes = thumbnailBytes);*/
   }
 
   Future getVideoSize(File file) async {
@@ -201,22 +214,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future compressVideo(VideoOutputQuality quality) async {
-    showDialog(
+    /*showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) =>
-            const Dialog(child: ProgressDialogWidget()));
+        builder: (context) => const Dialog(child: ProgressDialogWidget()));
 
-    final info = await VideoCompressApi.compressVideo(fileVideo!, quality);
+    final info = await VideoCompressApi.compressVideo(fileVideo!, quality);*/
 
-    setState(() => compressedVideoInfo = info);
+    //setState(() => compressedVideoInfo = info);
 
     Navigator.of(context).pop();
   }
 
   Widget buildCompressedVideoInfo() {
-    if (compressedVideoInfo == null) return Container();
-    final size = compressedVideoInfo!.filesize! / 1024;
+    //if (compressedVideoInfo == null) return Container();
+    //final size = compressedVideoInfo!.filesize! / 1024;
 
     return Column(
       children: [
@@ -239,12 +251,21 @@ class _MyHomePageState extends State<MyHomePage> {
         const SizedBox(
           height: 8,
         ),
-        Text(
+        /*Text(
           'Size: ${size.toInt()} KB',
           style: const TextStyle(
             fontSize: 20,
           ),
+        ),*/
+        const SizedBox(
+          height: 8,
         ),
+        /*Text(
+          'Path: ${compressedVideoInfo!.path}',
+          style: const TextStyle(
+            fontSize: 20,
+          ),
+        ),*/
         const SizedBox(
           height: 8,
         ),
@@ -267,6 +288,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void clearSelection() => setState(() {
         fileVideo = null;
-        compressedVideoInfo = null;
+        //compressedVideoInfo = null;
       });
 }
